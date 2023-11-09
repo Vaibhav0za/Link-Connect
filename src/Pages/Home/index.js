@@ -156,7 +156,7 @@ export default function Home() {
                 width: 70,
                 height: 70,
                 cursor: "pointer",
-                border: `2px #562b7c solid`,
+                border: `2px black solid`,
               }}
               key={data.post_id}
               alt="story"

@@ -9,14 +9,19 @@ import { Button } from "@mui/material";
 
 export default function AlignItemsList({ profileImg, username, status }) {
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      <ListItem alignItems="flex-start">
+    <List
+      sx={{
+        width: "100%",
+        maxWidth: 360,
+      }}
+    >
+      <ListItem alignItems="center">
         <ListItemAvatar>
           <Avatar alt={username} src={profileImg} />
         </ListItemAvatar>
         <ListItemText primary={username} />
-        <Button variant={status ? "contained" : "outlined"}>
-          {status ? "Add back" : "add"}
+        <Button sx={{ ml: 1 }} variant={status ? "contained" : "outlined"}>
+          {status ? "Added" : "add"}
         </Button>
       </ListItem>
       <Divider variant="fullWidth" />

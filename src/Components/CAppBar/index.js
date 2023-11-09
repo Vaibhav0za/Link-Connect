@@ -15,7 +15,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
-import AddBoxIcon from "@mui/icons-material/AddBox";
+import InputFileUpload from "../FileUploader";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -122,7 +122,8 @@ export default function PrimarySearchAppBar() {
       {" "}
       <MenuItem>
         <IconButton size="large" aria-label="upload" color="inherit">
-          <AddBoxIcon />
+          {/* <AddBoxIcon /> */}
+          <InputFileUpload />
         </IconButton>
         <p>Upload</p>
       </MenuItem>
@@ -194,7 +195,7 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton size="large" aria-label="upload image" color="inherit">
-              <AddBoxIcon />
+              <InputFileUpload />
             </IconButton>
 
             <IconButton

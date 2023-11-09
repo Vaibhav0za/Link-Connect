@@ -29,7 +29,7 @@ const CModal = (props) => {
               justifyContent: "space-between",
               padding: "15px 30px",
               borderBottom: "1px solid #000",
-              background: "#674188",
+              background: "black",
               position: "sticky",
             }}
           >
