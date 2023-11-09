@@ -178,7 +178,7 @@ export default function Home() {
           ))}
         </Grid>
         <Grid pt={5} flexDirection="column" item>
-          Pepole You May Know
+          Pepole You May Know ?
           {pepoleYouKnow.map((data) => (
             <PepoleSuggestion
               key={data.id}
