@@ -1,83 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import CAppBar from "../../Components/CAppBar";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import CImageCard from "../../Components/CImageCard";
 import PepoleSuggestion from "../../Components/PepoleSuggestion";
+import BaseSetting from "../../apis/setting";
+import { getApiData } from "../../apis/apiHelper";
 export default function Home() {
-  const dum_data = [
-    {
-      post_id: 1,
-      postImg: "https://source.unsplash.com/random/800x600",
-      postCaption: "Beautiful sunset at the beach",
-      postLocation: "Beach Paradise",
-      username: "vaibhav",
-    },
-    {
-      post_id: 2,
-      postImg: "https://source.unsplash.com/random/800x601",
-      postCaption: "Exploring the city streets",
-      postLocation: "Urban Exploration",
-      username: "dipak",
-    },
-    {
-      post_id: 3,
-      postImg: "https://source.unsplash.com/random/800x602",
-      postCaption: "Delicious homemade dinner",
-      postLocation: "Home Sweet Home",
-      username: "dev",
-    },
-    {
-      post_id: 4,
-      postImg: "https://source.unsplash.com/random/800x603",
-      postCaption: "Hiking in the mountains",
-      postLocation: "Mountain Trails",
-      username: "aditya",
-    },
-    {
-      post_id: 5,
-      postImg: "https://source.unsplash.com/random/800x604",
-      postCaption: "Adventures in the wilderness",
-      postLocation: "Wilderness Escape",
-      username: "jignesh",
-    },
-    {
-      post_id: 6,
-      postImg: "https://source.unsplash.com/random/800x605",
-      postCaption: "Morning coffee vibes",
-      postLocation: "Cozy Café Corner",
-      username: "mit",
-    },
-    {
-      post_id: 7,
-      postImg: "https://source.unsplash.com/random/800x606",
-      postCaption: "Sunrise over the city skyline",
-      postLocation: "Cityscape Marvel",
-      username: "yogesh",
-    },
-    {
-      post_id: 8,
-      postImg: "https://source.unsplash.com/random/800x607",
-      postCaption: "Gardening joy in the backyard",
-      postLocation: "Backyard Bliss",
-      username: "neel",
-    },
-    {
-      post_id: 9,
-      postImg: "https://source.unsplash.com/random/800x608",
-      postCaption: "Artistic graffiti on the streets",
-      postLocation: "Street Art Extravaganza",
-      username: "harshil",
-    },
-    {
-      post_id: 10,
-      postImg: "https://source.unsplash.com/random/800x609",
-      postCaption: "Serenity by the lakeside",
-      postLocation: "Lakeside Serenity",
-      username: "ankit",
-    },
-  ];
+  const [postData, setPostData] = useState([]);
+  useEffect(() => {
+    allPostData();
+  }, []);
+  const allPostData = () => {
+    const endpoint = `${BaseSetting.endpoint.getAllPost}`;
+    getApiData(endpoint, "get")
+      .then((result) => {
+        console.log("result =====>>>>> ", result.status);
+        if (result?.status) {
+          const response = result.allPosts;
+          console.log("response =====>>>>> ", response);
+          setPostData(response);
+        } else {
+          console.log("=====>>>>> error  ");
+        }
+      })
+      .catch((err) => {
+        console.log("=====>>>>> error ", err);
+      });
+  };
   const pepoleYouKnow = [
     {
       id: 1,
@@ -150,7 +101,7 @@ export default function Home() {
           direction="row"
           spacing={1}
         >
-          {dum_data.map((data) => (
+          {postData.map((data) => (
             <Avatar
               sx={{
                 width: 70,
@@ -167,7 +118,7 @@ export default function Home() {
       </Grid>
       <Grid justifyContent={"space-evenly"} container>
         <Grid pt={5} flexDirection="column" item>
-          {dum_data.map((data) => (
+          {postData.map((data) => (
             <CImageCard
               key={data.post_id}
               imgSrc={data?.postImg}

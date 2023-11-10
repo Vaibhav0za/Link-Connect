@@ -3,7 +3,6 @@ const BaseColor = {
   disablePrimary: "#C3ACD0",
   offWhite: "#F7EFE5",
   whiteColor: "#FFF",
-  red: "#FF1010",
   errorRed: "#FF0000",
   redBorder: "#FF0404",
   textGray: "#9B9B9B",

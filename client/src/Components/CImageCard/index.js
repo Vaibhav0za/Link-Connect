@@ -35,9 +35,11 @@ export default function RecipeReviewCard({
         }
         title={username}
         subheader={
-          <div>
-            <LocationOnIcon style={{ fontSize: 15 }} /> {postLocation}
-          </div>
+          postLocation && (
+            <div>
+              <LocationOnIcon style={{ fontSize: 15 }} /> {postLocation}
+            </div>
+          )
         }
       />
       <CardMedia component="img" height="400" image={imgSrc} alt="post" />
