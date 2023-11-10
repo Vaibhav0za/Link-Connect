@@ -4,6 +4,8 @@ import { Button, Typography, Grid } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import CModal from "../CModal";
 import CInput from "../CInput";
+import BaseSetting from "../../apis/setting";
+import { getApiData } from "../../apis/apiHelper";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -26,22 +28,48 @@ const StyledImage = styled("img")({
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [locationText, setLocationText] = useState("");
+  const [captionText, setCaptionText] = useState("");
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Display the selected image
       const reader = new FileReader();
       reader.onloadend = () => {
         setSelectedFile(reader.result);
+        console.log("reader =====>>>>> ", reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const uploadPost = () => {
+    const postData = {
+      postImg: selectedFile,
+      postCaption: captionText,
+      postLocation: locationText,
+      username: "static",
+    };
+    console.log(postData.postImg, "<<==blob");
+    const endpoint = `${BaseSetting.endpoint.uploadPost}`;
+    getApiData(endpoint, "post", postData)
+      .then((result) => {
+        console.log("result =====>>>>> ", result.status);
+        if (result?.status) {
+          const response = result.allPosts;
+          console.log("response =====>>>>> ", response);
+        } else {
+          console.log("=====>>>>> error  ");
+        }
+      })
+      .catch((err) => {
+        console.log("=====>>>>> error ", err);
+      });
+  };
+
   return (
     <>
-      <Button sx={{ p: 0, minWidth: 1 }} component="label" variant="text ">
+      <Button sx={{ p: 0, minWidth: 1 }} component="label" variant="text">
         <AddBoxIcon />
         <VisuallyHiddenInput
           type="file"
@@ -59,7 +87,7 @@ export default function InputFileUpload() {
         children={
           <div style={{ padding: "20px" }}>
             {selectedFile && (
-              <Grid  container>
+              <Grid container>
                 <StyledImage src={selectedFile} alt="Selected File" />
                 <Grid mt={5} gap={1} container>
                   <Grid alignItems={"center"} container>
@@ -67,7 +95,12 @@ export default function InputFileUpload() {
                       <Typography variant="p">Select Location</Typography>
                     </Grid>
                     <Grid xs={6} item>
-                      <CInput variant="outlined" placeholder="Nadiad" />
+                      <CInput
+                        value={locationText}
+                        variant="outlined"
+                        placeholder="Nadiad"
+                        onChange={(e) => setLocationText(e)}
+                      />
                     </Grid>
                   </Grid>
                   <Grid alignItems={"center"} container>
@@ -75,10 +108,17 @@ export default function InputFileUpload() {
                       <Typography variant="p">Enter Caption</Typography>
                     </Grid>
                     <Grid xs={6} item>
-                      <CInput variant="outlined" placeholder="Enjoying" />
+                      <CInput
+                        value={captionText}
+                        variant="outlined"
+                        placeholder="Enjoying"
+                        onChange={(e) => setCaptionText(e)}
+                      />
                     </Grid>
                     <Grid xs={6} item>
-                        <Button variant="contained">Post</Button>
+                      <Button onClick={uploadPost} variant="contained">
+                        Post
+                      </Button>
                     </Grid>
                   </Grid>
                 </Grid>
