@@ -8,11 +8,13 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import AccessibilityIcon from "@mui/icons-material/Accessibility";
 import KeyIcon from "@mui/icons-material/Key";
 import { useNavigate } from "react-router-dom";
+import BaseSetting from "../../apis/setting";
+import { getApiData } from "../../apis/apiHelper";
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [pass, setPass] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
   const [age, setAge] = useState("");
   const [country, setCountry] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -28,8 +30,8 @@ export default function SignUp() {
       newErrors.firstName = "First Name is required";
     }
 
-    if (!lastName.trim()) {
-      newErrors.lastName = "Last Name is required";
+    if (!username.trim()) {
+      newErrors.username = "Username is required";
     }
 
     if (!pass.trim()) {
@@ -38,7 +40,7 @@ export default function SignUp() {
 
     if (!age.trim()) {
       newErrors.age = "Age is required";
-    } else if (isNaN(age) || +age <= 0) {
+    } else if (isNaN(age) || age < 10 || age > 80) {
       newErrors.age = "Please enter a valid age";
     }
 
@@ -57,9 +59,28 @@ export default function SignUp() {
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Please enter a valid email address";
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const createUser = () => {
+    const postData = {
+    };
+    console.log(postData.postImg, "<<==blob");
+    const endpoint = `${BaseSetting.endpoint.uploadPost}`;
+    getApiData(endpoint, "post", postData)
+      .then((result) => {
+        console.log("result =====>>>>> ", result.status);
+        if (result?.status) {
+          const response = result.allPosts;
+          console.log("response =====>>>>> ", response);
+        } else {
+          console.log("=====>>>>> error  ");
+        }
+      })
+      .catch((err) => {
+        console.log("=====>>>>> error ", err);
+      });
   };
 
   return (
@@ -71,7 +92,7 @@ export default function SignUp() {
       <Grid mt={3} justifyContent={"center"} gap={2} container>
         <Grid item xs={2}>
           <CInput
-            placeholder={"First Name"}
+            placeholder={"Full Name"}
             startIcon={<AccountCircleIcon />}
             value={firstName}
             onChange={(e) => setFirstName(e)}
@@ -80,11 +101,11 @@ export default function SignUp() {
         </Grid>
         <Grid item xs={2}>
           <CInput
-            placeholder={"Last Name"}
+            placeholder={"username"}
             startIcon={<AccountCircleIcon />}
-            value={lastName}
-            onChange={(e) => setLastName(e)}
-            errorMsg={errors.lastName}
+            value={username}
+            onChange={(e) => setUsername(e)}
+            errorMsg={errors.username}
           />
         </Grid>
         <Grid item xs={2}>
@@ -146,7 +167,7 @@ export default function SignUp() {
             onClick={() => {
               if (validateForm()) {
                 console.log("Form is valid. Proceed with signup.");
-                // Add your signup logic here
+                createUser();
               }
             }}
           >

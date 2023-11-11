@@ -1,5 +1,5 @@
 import express from "express";
-import { getPosts, uploadPost } from "../controller/index.js";
+import { getPosts, uploadPost , signUpUser } from "../controller/index.js";
 import multer from "multer";
 import path from "path";
 const router = express.Router();
@@ -23,6 +23,9 @@ const upload = multer({ storage: storage });
 router.get("/", (req, res) => {
   res.send("Namaste Bharat!");
 });
+
+router.post("/sign-up", signUpUser);
+
 router.get("/getPost", getPosts);
 
 router.post("/uploadPost", upload.single("postImg"), uploadPost);

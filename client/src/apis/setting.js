@@ -7,6 +7,10 @@ const BaseSetting = {
   siteName: "Link Connect",
   siteIcon: "",
   endpoint: {
+    //login- sign up
+    signUp: "/sign-up",
+
+    //post apis
     getAllPost: "/getPost",
     uploadPost: "/uploadPost",
   },

@@ -11,6 +11,11 @@ export const getPosts = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+export const signUpUser = async (req, res) => {
+
+
+};
+
 export const uploadPost = async (req, res) => {
   try {
     if (req.file) {
