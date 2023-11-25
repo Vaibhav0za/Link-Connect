@@ -83,7 +83,6 @@ export default function Login() {
             onClick={() => {
               if (validateForm()) {
                 console.log("Form is valid. Proceed with signup.");
-                // Add your signup logic here
                 const loginData = {
                   username: email,
                   password: pass,
