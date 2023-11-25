@@ -9,6 +9,7 @@ const BaseSetting = {
   endpoint: {
     //login- sign up
     signUp: "/sign-up",
+    login: "/login",
 
     //post apis
     getAllPost: "/getPost",

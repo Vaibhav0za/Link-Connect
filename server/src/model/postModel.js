@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   username: String,
   createdAt: String,
   postCaption: String,
-  postImg: Object,
+  postImg: String,
   postLocation: String,
 });
 

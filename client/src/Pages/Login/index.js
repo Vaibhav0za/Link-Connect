@@ -4,10 +4,14 @@ import CInput from "../../Components/CInput";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyIcon from "@mui/icons-material/Key";
 import { useNavigate } from "react-router-dom";
-
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import BaseSetting from "../../apis/setting";
+import { getApiData } from "../../apis/apiHelper";
 export default function Login() {
   const [pass, setPass] = useState("");
   const [email, setEmail] = useState("");
+  const [togglePass, setTogglePass] = useState(false);
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -15,9 +19,7 @@ export default function Login() {
   const validateForm = () => {
     const newErrors = {};
     if (!email.trim()) {
-      newErrors.email = "Email Address is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "Please enter a valid email address";
+      newErrors.email = "Username is required";
     }
 
     if (!pass.trim()) {
@@ -26,7 +28,9 @@ export default function Login() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+  const handleTogglePass = () => {
+    setTogglePass(!togglePass);
+  };
   return (
     <Grid container>
       <Grid mt={10} justifyContent={"center"} gap={2} container>
@@ -36,8 +40,8 @@ export default function Login() {
       <Grid mt={3} justifyContent={"center"} gap={2} container>
         <Grid item xs={2}>
           <CInput
-            type={"email"}
-            placeholder={"Email Address"}
+            type={"text"}
+            placeholder={"Username"}
             startIcon={<AccountCircleIcon />}
             value={email}
             onChange={(e) => setEmail(e)}
@@ -48,9 +52,22 @@ export default function Login() {
       <Grid mt={3} justifyContent={"center"} gap={2} container>
         <Grid item xs={2}>
           <CInput
-            type={"password"}
+            type={togglePass ? "text" : "password"}
             placeholder={"Password"}
             startIcon={<KeyIcon />}
+            endIcon={
+              togglePass ? (
+                <VisibilityOffIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={handleTogglePass}
+                />
+              ) : (
+                <RemoveRedEyeIcon
+                  sx={{ cursor: "pointer" }}
+                  onClick={handleTogglePass}
+                />
+              )
+            }
             value={pass}
             onChange={(e) => setPass(e)}
             errorMsg={errors.pass}
@@ -67,6 +84,24 @@ export default function Login() {
               if (validateForm()) {
                 console.log("Form is valid. Proceed with signup.");
                 // Add your signup logic here
+                const loginData = {
+                  username: email,
+                  password: pass,
+                };
+                const endpoint = `${BaseSetting.endpoint.login}`;
+                getApiData(endpoint, "post", loginData)
+                  .then((result) => {
+                    console.log("result =====>>>>> ", result.status);
+                    if (result?.status) {
+                      const response = result.login;
+                      console.log("response =====>>>>> ", response);
+                    } else {
+                      console.log("=====>>>>> error");
+                    }
+                  })
+                  .catch((err) => {
+                    console.log("=====>>>>> error ", err);
+                  });
               }
             }}
           >

@@ -1,20 +1,20 @@
 import express from "express";
-import { getPosts, uploadPost , signUpUser } from "../controller/index.js";
+import {
+  getPosts,
+  uploadPost,
+  signUpUser,
+  login,
+} from "../controller/index.js";
 import multer from "multer";
 import path from "path";
 const router = express.Router();
 
-// Set up Multer for file uploads
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Set the destination folder for uploaded files
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
-    );
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
   },
 });
 
@@ -25,9 +25,10 @@ router.get("/", (req, res) => {
 });
 
 router.post("/sign-up", signUpUser);
+router.post("/login", login);
 
 router.get("/getPost", getPosts);
 
-router.post("/uploadPost", upload.single("postImg"), uploadPost);
+router.post("/uploadPost", upload.single("image"), uploadPost);
 
 export default router;

@@ -2,7 +2,13 @@ import mongoose from "mongoose";
 const Connection = async (username, password) => {
   const URL = `mongodb+srv://${username}:${password}@cluster0.qlxza7x.mongodb.net/?retryWrites=true&w=majority_write`;
   try {
-    await mongoose.connect(URL);
+    await mongoose.connect(URL, {
+      writeConcern: {
+        w: "majority",
+        j: true,
+        wtimeout: 1000,
+      },
+    });
     console.log("HELLO VAIBHAV, DATABASE CONNECTED SUCCESSFULLY");
   } catch (err) {
     console.log("ERROR WHILE CONNECTING DATABASE => ", err);

@@ -65,17 +65,23 @@ export default function SignUp() {
 
   const createUser = () => {
     const postData = {
+      fullName: firstName,
+      username: username,
+      age,
+      country,
+      mobileNumber,
+      password: pass,
+      
     };
-    console.log(postData.postImg, "<<==blob");
-    const endpoint = `${BaseSetting.endpoint.uploadPost}`;
+    const endpoint = `${BaseSetting.endpoint.signUp}`;
     getApiData(endpoint, "post", postData)
       .then((result) => {
         console.log("result =====>>>>> ", result.status);
         if (result?.status) {
-          const response = result.allPosts;
+          const response = result.signUp;
           console.log("response =====>>>>> ", response);
         } else {
-          console.log("=====>>>>> error  ");
+          console.log("=====>>>>> error");
         }
       })
       .catch((err) => {

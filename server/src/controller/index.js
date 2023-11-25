@@ -1,5 +1,6 @@
 import post from "../model/postModel.js";
-import img from "../model/imageSchema.js";
+import Image from "../model/imageSchema.js";
+import USER from "../model/userSignUpSchema.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -11,35 +12,75 @@ export const getPosts = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+
 export const signUpUser = async (req, res) => {
+  console.log("signUpUser =====>", req.body);
+  try {
+    const { username, fullName, age, country, mobileNumber, password } =
+      req.body;
 
+    const existingUser = await USER.findOne({ username });
+    if (existingUser) {
+      console.log("existing");
+      return res.status(400).json({
+        message: "Username is already taken. Please choose a different one.",
+      });
+    }
 
+    const newUser = new USER({
+      username,
+      fullName,
+      age,
+      country,
+      mobileNumber,
+      password,
+    });
+
+    await newUser.save();
+
+    res
+      .status(201)
+      .json({ message: "User successfully created.", status: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error", status: false });
+  }
 };
 
 export const uploadPost = async (req, res) => {
   try {
-    if (req.file) {
-      const postData = {
-        postImg: req.file.path,
-        postCaption: req.body.postCaption,
-        postLocation: req.body.postLocation,
-        username: req.body.username,
-      };
+    const newImage = new Image({
+      filename: req.file.originalname,
+      path: req.file.path,
+    });
 
-      const newPost = new img(postData);
-      await newPost.save();
+    await newImage.save();
 
-      // Update the image details in the ImageDetails collection
-      const imageDetails = new ImageDetails({ image: req.file.path });
-      await imageDetails.save();
-
-      res.status(201).json({ newPost, message: "Post created successfully" });
-    } else {
-      res.status(400).json({ message: "No file uploaded." });
-    }
+    res.send("Image uploaded successfully!");
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    console.error("Error uploading image:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await USER.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (password !== user.password) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+    return res
+      .status(200)
+      .json({ message: "Login successful" /*, token: token */ });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -30,29 +30,27 @@ export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [locationText, setLocationText] = useState("");
   const [captionText, setCaptionText] = useState("");
-
+  const [selectedFileDataUrl, setSelectedFileDataUrl] = useState(null);
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedFile(reader.result);
-        console.log("reader =====>>>>> ", reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    setSelectedFile(file);
+
+    // Use FileReader to convert the file to data URL
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      // Set the data URL as a state variable
+      setSelectedFileDataUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const uploadPost = () => {
-    const postData = {
-      postImg: selectedFile,
-      postCaption: captionText,
-      postLocation: locationText,
-      username: "static",
-    };
-    console.log(postData.postImg, "<<==blob");
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+    console.log("formData:", formData);
+
     const endpoint = `${BaseSetting.endpoint.uploadPost}`;
-    getApiData(endpoint, "post", postData)
+    getApiData(endpoint, "post", formData)
       .then((result) => {
         console.log("result =====>>>>> ", result.status);
         if (result?.status) {
@@ -69,7 +67,7 @@ export default function InputFileUpload() {
 
   return (
     <>
-      <Button sx={{ p: 0, minWidth: 1 }} component="label" variant="text">
+      <Button sx={{ p: 0, minWidth: 1 }} component="label" variant>
         <AddBoxIcon />
         <VisuallyHiddenInput
           type="file"
@@ -82,13 +80,14 @@ export default function InputFileUpload() {
         style={{ width: "30%" }}
         onClose={() => {
           setSelectedFile(null);
+          setSelectedFileDataUrl(null);
         }}
         title={"Upload Post"}
         children={
           <div style={{ padding: "20px" }}>
             {selectedFile && (
               <Grid container>
-                <StyledImage src={selectedFile} alt="Selected File" />
+                <StyledImage src={selectedFileDataUrl} alt="Selected File" />
                 <Grid mt={5} gap={1} container>
                   <Grid alignItems={"center"} container>
                     <Grid xs={4} item>

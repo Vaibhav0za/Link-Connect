@@ -1,12 +1,11 @@
-import mongoose from "mongoose";
+// imageModel.js
+import mongoose from 'mongoose';
 
-const ImageDetailsScehma = new mongoose.Schema(
-  {
-    image: String,
-  },
-  {
-    collection: "ImageDetails",
-  }
-);
-const img = mongoose.model("ImageDetails", ImageDetailsScehma);
-export default img;
+const imageSchema = new mongoose.Schema({
+  filename: String,
+  path: String,
+});
+
+const Image = mongoose.model('Image', imageSchema);
+
+export default Image;
