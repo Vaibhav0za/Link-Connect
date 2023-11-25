@@ -21,7 +21,14 @@ export default function RecipeReviewCard({
   username,
 }) {
   return (
-    <Card sx={{ maxWidth: 500, boxShadow: "none", mt: 1 }}>
+    <Card
+      sx={{
+        maxWidth: 500,
+        boxShadow: "none",
+        mt: 1,
+        border: "1px solid lightgray",
+      }}
+    >
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: purple[500] }} aria-label="recipe">
@@ -36,7 +43,7 @@ export default function RecipeReviewCard({
         title={username}
         subheader={
           postLocation && (
-            <div>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <LocationOnIcon style={{ fontSize: 15 }} /> {postLocation}
             </div>
           )

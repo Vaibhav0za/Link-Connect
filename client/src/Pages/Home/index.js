@@ -120,7 +120,7 @@ export default function Home() {
         <Grid pt={5} flexDirection="column" item>
           {postData.map((data) => (
             <CImageCard
-              key={data.post_id}
+              key={data?._id}
               imgSrc={data?.postImg}
               postCaption={data?.postCaption}
               postLocation={data?.postLocation}
